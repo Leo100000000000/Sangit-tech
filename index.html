@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <!-- Use the Inter font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js CDN for 3D graphics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        /* Custom scrollbar for a sleek look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+        /* Style for the 3D canvas background */
+        #three-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+        }
+
+        /* Hero section content needs a higher z-index to be on top of the canvas */
+        .hero-content {
+            position: relative;
+            z-index: 20;
+        }
+
+        /* CSS Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Animation classes with delays */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .animate-on-scroll.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .animate-on-scroll.in-view.delay-100 { transition-delay: 0.1s; }
+        .animate-on-scroll.in-view.delay-200 { transition-delay: 0.2s; }
+        .animate-on-scroll.in-view.delay-300 { transition-delay: 0.3s; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 w-full bg-gray-900 bg-opacity-90 backdrop-blur-sm shadow-lg z-50 animate-on-scroll">
+        <div class="container mx-auto px-4 py-4 flex justify-center space-x-8">
+            <a href="#about" class="text-white hover:text-cyan-400 transition duration-300">About</a>
+            <a href="#interests" class="text-white hover:text-cyan-400 transition duration-300">Interests</a>
+            <a href="#hobbies" class="text-white hover:text-cyan-400 transition duration-300">Hobbies</a>
+            <a href="#subjects" class="text-white hover:text-cyan-400 transition duration-300">Best Subject</a>
+            <a href="#education" class="text-white hover:text-cyan-400 transition duration-300">Education</a>
+            <a href="#future" class="text-white hover:text-cyan-400 transition duration-300">Future</a>
+            <a href="#contact" class="text-white hover:text-cyan-400 transition duration-300">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Photo -->
+    <header class="h-screen flex flex-col justify-center items-center text-center p-8 bg-gray-800 relative overflow-hidden">
+        <!-- 3D Canvas -->
+        <canvas id="three-canvas"></canvas>
+
+        <!-- Hero Content -->
+        <div class="hero-content flex flex-col justify-center items-center">
+            <!-- Placeholder Image. Replace the URL with your own photo. -->
+            <img src="Sangit.jpeg" 
+                 alt="Me" 
+                 class="rounded-full w-48 h-48 md:w-64 md:h-64 object-cover ring-4 ring-cyan-400 mb-6" style="animation: pulse 2s infinite ease-in-out;">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-2" style="animation: slideUp 0.8s ease-out forwards;"><b>Sangit Dangal</b></h1>
+            <p class="text-lg md:text-xl text-gray-400" style="animation: slideUp 0.8s ease-out 0.2s forwards;">Student | Learner | Explorer</p>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 md:py-24 px-4 animate-on-scroll">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-8">About Me</h2>
+            <p class="text-md md:text-lg text-gray-300 leading-relaxed text-center">
+                Hello! My name is Sangit Dangal, and I am 16 years old. I am currently studying in Class 10. My main interests are in the fields of **cyber security** and **ethical hacking**. I am fascinated by how technology can be used to protect data and systems from threats.
+            </p>
+        </div>
+    </section>
+
+    <!-- Interests Section -->
+    <section id="interests" class="py-16 md:py-24 px-4 bg-gray-800">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-8 animate-on-scroll">Interests</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Interest Card 1 -->
+                <div class="bg-gray-700 p-6 rounded-xl shadow-lg transform transition-transform hover:scale-105 animate-on-scroll">
+                    <div class="flex items-center mb-4">
+                        <span class="text-4xl mr-4">💻</span>
+                        <h3 class="text-xl font-semibold text-white">Technology</h3>
+                    </div>
+                    <p class="text-gray-300">I'm fascinated by the latest advancements in technology, from AI to web development.</p>
+                </div>
+                <!-- Interest Card 2 -->
+                <div class="bg-gray-700 p-6 rounded-xl shadow-lg transform transition-transform hover:scale-105 animate-on-scroll delay-100">
+                    <div class="flex items-center mb-4">
+                        <span class="text-4xl mr-4">📚</span>
+                        <h3 class="text-xl font-semibold text-white">Outdoor games</h3>
+                    </div>
+                    <p class="text-gray-300">I like outdoor games. playing cricket and volley ball, football etc with my brothers and friends.</p>
+                </div>
+                <!-- Interest Card 3 -->
+                <div class="bg-gray-700 p-6 rounded-xl shadow-lg transform transition-transform hover:scale-105 animate-on-scroll delay-200">
+                    <div class="flex items-center mb-4">
+                        <span class="text-4xl mr-4">🌌</span>
+                        <h3 class="text-xl font-semibold text-white">Astronomy</h3>
+                    </div>
+                    <p class="text-gray-300">I love learning about space, stars, and the mysteries of the universe.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hobbies Section -->
+    <section id="hobbies" class="py-16 md:py-24 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-8 animate-on-scroll">Hobbies</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Hobby Card 1 -->
+                <div class="bg-gray-700 rounded-xl overflow-hidden shadow-lg transform transition-transform hover:scale-105 animate-on-scroll">
+                    <!-- Placeholder image. Replace with a real photo. -->
+                    <img src="fliperzepro.jpeg" 
+                         alt="Hobby: Hacking Device" 
+                         class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-white mb-2">Learning about Hacking device</h3>
+                        <p class="text-gray-300">I Like to learn about hacking. My favorite hacking device is Flipper Zero.</p>
+                    </div>
+                </div>
+                <!-- Hobby Card 2 -->
+                <div class="bg-gray-700 rounded-xl overflow-hidden shadow-lg transform transition-transform hover:scale-105 animate-on-scroll delay-100">
+                    <!-- Placeholder image. Replace with a real photo. -->
+                    <img src="coarding.jpeg" 
+                         alt="Hobby: Coding" 
+                         class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-white mb-2">Coding</h3>
+                        <p class="text-gray-300">I love spending my free time building small projects and learning new programming languages.</p>
+                    </div>
+                </div>
+                <!-- Hobby Card 3 -->
+                <div class="bg-gray-700 rounded-xl overflow-hidden shadow-lg transform transition-transform hover:scale-105 animate-on-scroll delay-200">
+                    <!-- Placeholder image. Replace with a real photo. -->
+                    <img src="outdoor.jpeg" 
+                         alt="Hobby: Outdoor Games" 
+                         class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-white mb-2">Outdoor game</h3>
+                        <p class="text-gray-300">I like playing outdoor games with my brothers and friends.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Subject Section -->
+    <section id="subjects" class="py-16 md:py-24 px-4 bg-gray-800 animate-on-scroll">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-8">My Best Subject</h2>
+            <div class="bg-gray-700 p-8 rounded-xl shadow-lg text-center">
+                <!-- Added a placeholder image for the best subject. -->
+                <img src="science,maths.jpeg" 
+                     alt="Best Subject: Science and Maths"
+                     class="w-full h-48 object-cover rounded-xl mb-6">
+                <h3 class="text-2xl font-semibold text-white"> Science,Maths</h3>
+                <p class="text-gray-300 mt-2">My favorite subject is Science and Maths. Because I like **Chemical Reaction and Solving a Mathematical Problem**</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="py-16 md:py-24 px-4 animate-on-scroll">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-8">Education</h2>
+            <div class="bg-gray-700 p-8 rounded-xl shadow-lg">
+                <div class="mb-6">
+                    <h3 class="text-xl md:text-2xl font-semibold text-white">Shree Jyoti Secondary School.</h3>
+                    <p class="text-gray-400">Class of 2025</p>
+                    <p class="text-gray-300 mt-2"><b>I read in class-10.</b></p>
+                </div>
+                <div>
+                    <h3 class="text-xl md:text-2xl font-semibold text-white">College/University Name:None (Future)</h3>
+                    <p class="text-gray-400">None</p>
+                    <p class="text-gray-300 mt-2">None</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Section (NEW) -->
+    <section id="future" class="py-16 md:py-24 px-4 bg-gray-800 animate-on-scroll">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-8">My Future</h2>
+            <div class="bg-gray-700 p-8 rounded-xl shadow-lg text-center">
+                <p class="text-md md:text-lg text-gray-300 leading-relaxed">
+                    I'm excited about the future and my potential to grow. My goals include becoming a software engineer, contributing to open-source projects, and exploring new frontiers in artificial intelligence. I'm committed to continuous learning and making a positive impact with my skills.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 md:py-24 px-4 animate-on-scroll">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-8">Contact Me</h2>
+            <div class="bg-gray-700 p-8 rounded-xl shadow-lg text-center">
+                <p class="text-md md:text-lg text-gray-300 leading-relaxed mb-4">
+                    Feel free to get in touch if you have any questions or just want to connect!
+                </p>
+                <a href="sangitdangal82@gmail.com" class="inline-block bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300">
+                    Send Me an Email
+                  <br>
+                    <a href="9702028331" class="inline-block bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300">
+                    Whatsapp Me
+                 <a href="https://www.facebook.com/share/19rVBiGtWZ/" class="inline-block bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300">
+                    Send Me on Facebook
+                    
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-8 text-center text-gray-500">
+        <p>Created by [Sangit Dangal].©copyright All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript for smooth scrolling, animations, and 3D scene -->
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Intersection Observer for scroll-based animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.animate-on-scroll').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Three.js 3D scene
+        window.onload = function() {
+            // Scene setup
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById('three-canvas'),
+                alpha: true // Make background transparent
+            });
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.position.z = 5;
+
+            // Dodecahedron Geometry for a cool, sci-fi look
+            const geometry = new THREE.DodecahedronGeometry(1.5, 0); 
+            
+            // Material for the object
+            const material = new THREE.MeshStandardMaterial({
+                color: 0x06b6d4, // Tailwind's cyan-500
+                roughness: 0.4,
+                metalness: 0.8
+            });
+
+            const object = new THREE.Mesh(geometry, material);
+            scene.add(object);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0xffffff, 1);
+            pointLight.position.set(5, 5, 5);
+            scene.add(pointLight);
+
+            // Mouse interaction
+            let mouseX = 0, mouseY = 0;
+            const windowHalfX = window.innerWidth / 2;
+            const windowHalfY = window.innerHeight / 2;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX - windowHalfX) / 100;
+                mouseY = (event.clientY - windowHalfY) / 100;
+            });
+
+            // Animation Loop
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // Rotate the object
+                object.rotation.x += 0.005;
+                object.rotation.y += 0.005;
+
+                // Make object follow mouse
+                object.rotation.y += (mouseX - object.rotation.y) * 0.05;
+                object.rotation.x += (mouseY - object.rotation.x) * 0.05;
+
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Handle window resizing
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+    </script>
+</body>
+</html>
